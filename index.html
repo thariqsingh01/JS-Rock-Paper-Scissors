@@ -32,10 +32,10 @@
             let humanChoice = prompt("Please enter your choice(rock, paper or scissors)");
             humanChoice = humanChoice.toLowerCase();
 
-            while (humanChoice !="rock" || humanChoice != "paper" || humanChoice != "scissors" ) {
-                let humanChoice = prompt("Please enter your choice(rock, paper or scissors)");
-                humanChoice = humanChoice.toLowerCase();
-            }
+            //while (humanChoice !="rock" && humanChoice != "paper" && humanChoice != "scissors" ) {
+            //    let humanChoice = prompt("Please enter your choice(rock, paper or scissors)");
+            //    humanChoice = humanChoice.toLowerCase();
+            //}
 
             return humanChoice;
 
@@ -46,20 +46,32 @@
                 case "rock":
                     if(humanChoice == "scissors"){
                         computerScore += 1;
+                        console.log("Computer won this round. Rock crushes scissors.");
                     }else if(humanChoice == "paper"){
                         humanScore +=1
+                        console.log("Human won this round. Paper covers rock.");
+                    }else if(humanChoice == "rock"){
+                        Console.log("It's a draw!");
                     }
                 case "paper":
                     if(humanChoice == "rock"){
                         computerScore += 1;
+                        console.log("Computer won this round. Paper covers rock.");
                     }else if(humanChoice == "scissors"){
                         humanScore +=1
+                        console.log("Human won this round. Scissors cuts paper.");
+                    }else if(humanChoice == "paper"){
+                        Console.log("It's a draw!");
                     }
                 case "scissors":
                     if(humanChoice == "paper"){
                         computerScore += 1;
+                        console.log("Computer won this round. Scissors cuts paper.");
                     }else if(humanChoice == "rock"){
                         humanScore +=1
+                        console.log("Computer won this round. Rock crushes scissors.");
+                    }else if(humanChoice == "scissors"){
+                        Console.log("It's a draw!");
                     }
 
             }
@@ -67,7 +79,9 @@
 
         function playGame(){
             for (let i = 0; i < 5; i++) {
-                playGame();
+                let comp = getComputerChoice();
+                let human = getHumanChoice();
+                playRound(comp, human);
             }
 
             if(humanScore>computerScore){
@@ -87,6 +101,8 @@
                 console.log("Have a good day!");
             }
         }
+
+        playGame()
 
     </script>
 </body>
