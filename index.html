@@ -7,6 +7,9 @@
 </head>
 <body>
     <script>
+        let humanScore = 0;
+        let computerScore = 0;
+
         function getComputerChoice(){
             let comp = Math.random()*3;
             let compChoice;
@@ -36,6 +39,53 @@
 
             return humanChoice;
 
+        }
+
+        function playRound(compChoice, humanChoice){
+            switch(compChoice){
+                case "rock":
+                    if(humanChoice == "scissors"){
+                        computerScore += 1;
+                    }else if(humanChoice == "paper"){
+                        humanScore +=1
+                    }
+                case "paper":
+                    if(humanChoice == "rock"){
+                        computerScore += 1;
+                    }else if(humanChoice == "scissors"){
+                        humanScore +=1
+                    }
+                case "scissors":
+                    if(humanChoice == "paper"){
+                        computerScore += 1;
+                    }else if(humanChoice == "rock"){
+                        humanScore +=1
+                    }
+
+            }
+        }
+
+        function playGame(){
+            for (let i = 0; i < 5; i++) {
+                playGame();
+            }
+
+            if(humanScore>computerScore){
+                console.log("Congratulations! You have won");
+            }else{
+                console.log*("Sorry you have lost! Try again next time");
+            }
+
+            humanScore=0;
+            computerScore=0;
+
+            let playAgain = prompt("Would you like to play another game?");
+            playAgain =playAgain.toLowerCase();
+            if (playAgain =="yes"){
+                playGame()
+            }else if (playAgain == "no"){
+                console.log("Have a good day!");
+            }
         }
 
     </script>
