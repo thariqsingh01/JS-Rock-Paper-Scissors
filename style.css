@@ -1,0 +1,23 @@
+body{
+    text-align: center;
+    background-color: #f2f2f2;
+}
+
+.heading{
+    text-align: center;
+    color: #000000;
+}
+
+.table{
+    background-color: #b6b09f;
+    text-align: center;
+    width: 50%;
+    margin: auto;
+    padding: 10px;
+}
+
+.choices{
+    border-bottom:  3px solid  #f2f2f2;
+    justify-content: space-between;
+    width: 100%;
+}
