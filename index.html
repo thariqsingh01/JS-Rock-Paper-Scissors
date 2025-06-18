@@ -5,6 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rock Paper Scissors</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        .selected {
+            background-color: lightblue;
+            border: 2px solid #007BFF;
+            border-radius: 10px;
+        }
+        .choices img {
+            margin: 10px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
 
@@ -14,25 +25,30 @@
     
     <div class="table">
         <h3>Your Choice</h3>
-        <div class="choices">
-            <img src="images/rock.png" alt="rock" width="100">
-            <img src="images/paper.png" alt="paper" width="100">
-            <img src="images/scissors.png" alt="scissors" width="100">
+        <div class="choices" id="human-choices">
+            <img onclick="getHumanChoice('rock')" src="images/rock.png" alt="rock" id="human-rock" width="100">
+            <img onclick="getHumanChoice('paper')" src="images/paper.png" alt="paper" id="human-paper" width="100">
+            <img onclick="getHumanChoice('scissors')" src="images/scissors.png" alt="scissors" id="human-scissors" width="100">
         </div>
+
         <h3>Computer's Choice</h3>
-        <div class="choices">
-            <img src="images/rock.png" alt="rock" width="100">
-            <img src="images/paper.png" alt="paper" width="100">
-            <img src="images/scissors.png" alt="scissors" width="100">
+        <div class="choices" id="computer-choices">
+            <img src="images/rock.png" alt="rock" id="comp-rock" width="100">
+            <img src="images/paper.png" alt="paper" id="comp-paper" width="100">
+            <img src="images/scissors.png" alt="scissors" id="comp-scissors" width="100">
         </div>
-        <p>rock beats paper</p>
-        <p>round score</p>
-        <p>game score</p>
+
+        <p id="result">New Game Starting...</p>
+        <p id="round-score">Round Score (Player : Computer) = 0 : 0</p>
+        <p id="game-score">Game Score (Player : Computer) = 0 : 0</p>
     </div>
 
     <script>
         let humanScore = 0;
         let computerScore = 0;
+        let count = 0;
+        let computerGame = 0;
+        let humanGame = 0;
 
         function getComputerChoice(){
             let comp = Math.floor(Math.random() * 3);
@@ -43,79 +59,74 @@
             }
         }
 
-        function getHumanChoice(){
-            let humanChoice = prompt("Please enter your choice (rock, paper or scissors)").toLowerCase();
-            while (humanChoice !== "rock" && humanChoice !== "paper" && humanChoice !== "scissors") {
-                humanChoice = prompt("Invalid input. Please enter rock, paper or scissors").toLowerCase();
-            }
-            return humanChoice;
+        function getHumanChoice(humanChoice){
+            clearHighlights();
+            document.getElementById(`human-${humanChoice}`).classList.add('selected');
+
+            const compChoice = getComputerChoice();
+            document.getElementById(`comp-${compChoice}`).classList.add('selected');
+
+            playRound(compChoice, humanChoice);
         }
 
         function playRound(compChoice, humanChoice){
-            switch(compChoice){
-                case "rock":
-                    if(humanChoice === "scissors"){
-                        computerScore++;
-                        console.log("Computer won this round. Rock crushes scissors.");
-                    } else if(humanChoice === "paper"){
-                        humanScore++;
-                        console.log("Human won this round. Paper covers rock.");
-                    } else {
-                        console.log("It's a draw! Both chose rock.");
-                    }
-                    break;
-                case "paper":
-                    if(humanChoice === "rock"){
-                        computerScore++;
-                        console.log("Computer won this round. Paper covers rock.");
-                    } else if(humanChoice === "scissors"){
-                        humanScore++;
-                        console.log("Human won this round. Scissors cuts paper.");
-                    } else {
-                        console.log("It's a draw! Both chose paper.");
-                    }
-                    break;
-                case "scissors":
-                    if(humanChoice === "paper"){
-                        computerScore++;
-                        console.log("Computer won this round. Scissors cuts paper.");
-                    } else if(humanChoice === "rock"){
-                        humanScore++;
-                        console.log("Human won this round. Rock crushes scissors.");
-                    } else {
-                        console.log("It's a draw! Both chose scissors.");
-                    }
-                    break;
+            if (compChoice === humanChoice) {
+                document.getElementById("result").textContent = `It's a tie! Both chose ${humanChoice}.`;
+            } else {
+                switch(compChoice){
+                    case "rock":
+                        if(humanChoice === "scissors"){
+                            computerScore++;
+                            document.getElementById("result").textContent = "Rock crushes Scissors. Computer wins!";
+                        } else if(humanChoice === "paper"){
+                            humanScore++;
+                            document.getElementById("result").textContent = "Paper covers Rock. Player wins!";
+                        }
+                        break;
+                    case "paper":
+                        if(humanChoice === "rock"){
+                            computerScore++;
+                            document.getElementById("result").textContent = "Paper covers Rock. Computer wins!";
+                        } else if(humanChoice === "scissors"){
+                            humanScore++;
+                            document.getElementById("result").textContent = "Scissors cuts Paper. Player wins!";
+                        }
+                        break;
+                    case "scissors":
+                        if(humanChoice === "paper"){
+                            computerScore++;
+                            document.getElementById("result").textContent = "Scissors cuts Paper. Computer wins!";
+                        } else if(humanChoice === "rock"){
+                            humanScore++;
+                            document.getElementById("result").textContent = "Rock crushes Scissors. Player wins!";
+                        }
+                        break;
+                }
+            }
+
+            count++;
+            document.getElementById("round-score").textContent = `Round Score (Player : Computer) = ${humanScore} : ${computerScore}`;
+
+            if(count === 5){
+                if(humanScore > computerScore){
+                    humanGame++;
+                } else if(computerScore > humanScore){
+                    computerGame++;
+                }
+
+                document.getElementById("game-score").textContent = `Game Score (Player : Computer) = ${humanGame} : ${computerGame}`;
+
+                humanScore = 0;
+                computerScore = 0;
+                count = 0;
+                document.getElementById("round-score").textContent = `Round Score (Player : Computer) = ${humanScore} : ${computerScore}`;
             }
         }
 
-        function playGame(){
-            for (let i = 0; i < 5; i++) {
-                let comp = getComputerChoice();
-                let human = getHumanChoice();
-                playRound(comp, human);
-            }
-
-            if(humanScore > computerScore){
-                console.log("Congratulations! You have won ."+humanScore+":"+computerScore);
-            } else if (humanScore < computerScore){
-                console.log("Sorry you have lost! Try again next time ."+humanScore+":"+computerScore);
-            } else {
-                console.log("It's a tie! "+humanScore+":"+computerScore);
-            }
-
-            humanScore = 0;
-            computerScore = 0;
-
-            let playAgain = prompt("Would you like to play another game? (yes/no)").toLowerCase();
-            if (playAgain === "yes"){
-                playGame();
-            } else {
-                console.log("Have a good day!");
-            }
+        function clearHighlights() {
+            const allChoices = document.querySelectorAll('.choices img');
+            allChoices.forEach(img => img.classList.remove('selected'));
         }
-
-        //playGame();
     </script>
 </body>
 </html>
